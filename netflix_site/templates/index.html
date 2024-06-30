@@ -39,7 +39,7 @@
         </nav>
 
 
-        {% comment %} <div class="flex space-x-5 items-center">
+         <div class="flex space-x-5 items-center">
             <form action="search" method="POST">
                 {% csrf_token %}
                 <input type="search" name="search_term" placeholder="Search" class="bg-gray-700 p-2 rounded">
@@ -51,6 +51,8 @@
             </div>
         </div>
     </header>
+
+
     <section class="relative py-20 px-10" style="background-image: url('{{featured_movie.image_cover.url}}'); background-size: cover; background-position: center;">
         <div>
             <h1 style="color: black;" class="text-5xl mb-5">{{featured_movie.title}}</h1>
@@ -61,7 +63,32 @@
                 </a>
             </div>
         </div>
-    </section> {% endcomment %}
+    </section>
+    
+    
+    <section class="py-10 px-5">
+        <h2 class="text-xl mb-5">My List</h2>
+        <div class="flex space-x-5 overflow-x-auto">
+
+            {% for movie in movies %}
+            <div class="w-40 h-64 flex-shrink-0 film-card" 
+            onclick="showModal(this)"
+            data-title="{{ movie.title }}"
+            data-description="{{ movie.description }}"
+            data-release-date="{{ movie.release_date|date:'Y' }}"
+            data-genre="{{ movie.get_genre_display }}" 
+            data-length="{{ movie.length }}"
+            data-image-card-url="{{ movie.image_card.url }}"
+            data-image-cover-url="{{ movie.image_cover.url }}"
+            data-video-url="/movie/{{ movie.uu_id }}"
+            style="background-image: url('{{movie.image_card.url}}'); background-size: cover; background-position: center;">
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </section>
     <section class="py-10 px-5">
     
         <h2 class="text-xl mb-5">Popular on Netflix</h2>
@@ -155,7 +182,7 @@
             }
         }
 
-        function addItemToList() {
+        {% comment %} function addItemToList() {
             const modal = document.getElementById('movieModal')
             var movieID = modal.querySelector('.modal-content a').href;
 
@@ -178,7 +205,7 @@
                     console.error("Error adding item to list: " + errmsg);
                 }
             });
-        }
+        } {% endcomment %}
     </script>
 </body>
 
