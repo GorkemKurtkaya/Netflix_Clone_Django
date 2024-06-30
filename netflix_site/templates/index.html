@@ -56,7 +56,6 @@
     <section class="relative py-20 px-10" style="background-image: url('{{featured_movie.image_cover.url}}'); background-size: cover; background-position: center;">
         <div>
             <h1 style="color: black;" class="text-5xl mb-5">{{featured_movie.title}}</h1>
-            <p style="color: black;" class="mb-5">{{featured_movie.description}}</p>
             <div class="flex space-x-4">
                 <a href="/movie/{{featured_movie.uu_id}}">
                     <button class="bg-red-600 text-white p-2 px-5 rounded hover:bg-red-500">Play</button>
@@ -68,74 +67,100 @@
     
     <section class="py-10 px-5">
         <h2 class="text-xl mb-5">My List</h2>
-        <div class="flex space-x-5 overflow-x-auto">
-
-            {% for movie in movies %}
-            <div class="w-40 h-64 flex-shrink-0 film-card" 
-            onclick="showModal(this)"
-            data-title="{{ movie.title }}"
-            data-description="{{ movie.description }}"
-            data-release-date="{{ movie.release_date|date:'Y' }}"
-            data-genre="{{ movie.get_genre_display }}" 
-            data-length="{{ movie.length }}"
-            data-image-card-url="{{ movie.image_card.url }}"
-            data-image-cover-url="{{ movie.image_cover.url }}"
-            data-video-url="/movie/{{ movie.uu_id }}"
-            style="background-image: url('{{movie.image_card.url}}'); background-size: cover; background-position: center;">
-
-            </div>
-            {% endfor %}
-
-        </div>
-
-    </section>
-    <section class="py-10 px-5">
-    
-        <h2 class="text-xl mb-5">Popular on Netflix</h2>
-        <div class="flex space-x-5 overflow-x-auto">
-
-            {% for movie in movies %}
-            <div class="w-40 h-64 flex-shrink-0 film-card"
-                onclick="showModal(this)" 
+        <div class="relative">
+            <button onclick="scrollLeft()" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded z-10">←</button>
+            <div class="flex space-x-5" id="popularMoviesContainer" style="scroll-behavior: smooth;">
+              {% for movie in movies reversed %}
+              <div class="w-40 h-64 flex-shrink-0 film-card"
+                onclick="showModal(this)"
                 data-title="{{ movie.title }}"
                 data-description="{{ movie.description }}"
                 data-release-date="{{ movie.release_date|date:'Y' }}"
-                data-genre="{{ movie.get_genre_display }}" 
+                data-genre="{{ movie.get_genre_display }}"
                 data-length="{{ movie.length }}"
                 data-image-card-url="{{ movie.image_card.url }}"
                 data-image-cover-url="{{ movie.image_cover.url }}"
                 data-video-url="/movie/{{ movie.uu_id }}"
-                style="background-image: url('{{movie.image_card.url}}'); background-size: cover; background-position: center;">
+                style="background-image: url('{{ movie.image_card.url }}'); background-size: cover; background-position: center;">
+              </div>
+              {% endfor %}
+            </div>
+            <button onclick="scrollRight()" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded z-10">→</button>
+          </div>
+    </section>
+
+
+    <section class="py-10 px-5">
+        <h2 class="text-xl mb-5">Popular on Netflix</h2>
+        <div class="relative">
+          <button onclick="scrollLeft()" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded z-10">←</button>
+          <div class="flex space-x-5" id="popularMoviesContainer" style="scroll-behavior: smooth;">
+            {% for movie in movies %}
+            <div class="w-40 h-64 flex-shrink-0 film-card"
+              onclick="showModal(this)"
+              data-title="{{ movie.title }}"
+              data-description="{{ movie.description }}"
+              data-release-date="{{ movie.release_date|date:'Y' }}"
+              data-genre="{{ movie.get_genre_display }}"
+              data-length="{{ movie.length }}"
+              data-image-card-url="{{ movie.image_card.url }}"
+              data-image-cover-url="{{ movie.image_cover.url }}"
+              data-video-url="/movie/{{ movie.uu_id }}"
+              style="background-image: url('{{ movie.image_card.url }}'); background-size: cover; background-position: center;">
             </div>
             {% endfor %}
-    </section>
+          </div>
+          <button onclick="scrollRight()" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded z-10">→</button>
+        </div>
+      </section>
+
+      <style>
+        #popularMoviesContainer {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        #popularMoviesContainer::-webkit-scrollbar {
+          display: none;
+        }
+      </style>
     
     
 
-    <!-- Modal -->
+        <!-- Modal -->
     <div class="modal" id="movieModal">
         <div class="modal-content">
-            <div class="flex justify-between">
-                <h2 class="text-xl mb-5">Movie Title</h2>
-                <button onclick="hideModal()">X</button>
-            </div>
-            <img width="1000" height="100" src="https://bloximages.newyork1.vip.townnews.com/newsrecord.org/content/tncms/assets/v3/editorial/8/1e/81ea500c-45ac-11ee-a11e-a7402910a7e7/64ecaae69243a.image.jpg" alt="Movie Image" class=" mb-5">
-            <div class="flex justify-between mb-5">
-                <span>Year: 2023</span>
-                <span>Length: 2h 15min</span>
-            </div>
-            <p class="mb-5">Detailed information about the movie.</p>
-            <div class="flex space-x-4 mb-5">
-                <a href="movie.html">
-                    <button class="bg-red-600 text-white p-2 px-5 rounded hover:bg-red-500">Play</button>
-                </a>
-                <button id="addToListButton" onclick="addItemToList()" class="border border-white text-white p-2 px-5 rounded hover:bg-gray-700">
-                    Add to List
-                </button>
-            </div>
-            
+        <div class="flex justify-between">
+            <h2 class="text-2xl mb-5">Movie Title</h2>
+            <button onclick="hideModal()">X</button>
+        </div>
+        <img src="https://bloximages.newyork1.vip.townnews.com/newsrecord.org/content/tncms/assets/v3/editorial/8/1e/81ea500c-45ac-11ee-a11e-a7402910a7e7/64ecaae69243a.image.jpg" alt="Movie Image" class="w-full h-64 object-cover mb-5">
+        <div class="flex justify-between mb-5">
+            <span>Year: 2023</span>
+            <span>Length: 2h 15min</span>
+        </div>
+        <p class="mb-5">Detailed information about the movie.</p>
+        <div class="flex space-x-4 mb-5">
+            <a href="movie.html">
+            <button class="bg-red-600 text-white p-2 px-5 rounded hover:bg-red-500">Play</button>
+            </a>
+            <button id="addToListButton" onclick="addItemToList()" class="border border-white text-white p-2 px-5 rounded hover:bg-gray-700">
+            Add to List
+            </button>
+        </div>
         </div>
     </div>
+    
+    <style>
+        #movieModal {
+        overflow-y: hidden; /* remove scrollbar */
+        }
+        #movieModal img {
+        width: 100%; /* make image full width */
+        height: 600px; /* adjust image height to your liking */
+        object-fit: cover; /* ensure image is scaled properly */
+        }
+    </style>
 
     <script>
         function showModal(element) {
@@ -206,7 +231,29 @@
                 }
             });
         } 
+
+        const container = document.getElementById('popularMoviesContainer');
+
+        container.addEventListener('wheel', (e) => {
+            e.preventDefault();
+        });
+
+        container.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'PageUp' || e.key === 'PageDown') {
+            e.preventDefault();
+            }
+        });
+
+        function scrollLeft() {
+            container.scrollLeft = Math.max(container.scrollLeft - 300, 0);
+        }
+
+        function scrollRight() {
+            const maxScrollWidth = container.scrollWidth - container.offsetWidth;
+            container.scrollLeft = Math.min(container.scrollLeft + 300, maxScrollWidth);
+        }
     </script>
+
 </body>
 
 </html>

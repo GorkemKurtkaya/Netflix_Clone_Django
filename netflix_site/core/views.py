@@ -11,9 +11,11 @@ from django.shortcuts import get_object_or_404
 @login_required(login_url='login')
 def index(request):
     movies = Movie.objects.all()
+    featured_movie=Movie.objects.order_by('?').first()
     
     context= {
-        'movies': movies
+        'movies': movies,
+        'featured_movie': featured_movie
     }
     return render(request, 'index.html', context)
 
